@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDUCATION - VN - Đăng Nhập</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url('https://agu.edu.vn/sites/default/files/2023-06/AGU%20campus.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body class="flex justify-center items-center h-screen">
+
+  <div class="bg-white bg-opacity-95 p-8 rounded-lg shadow-xl w-full max-w-md text-center">
+    <h1 class="text-2xl font-bold text-blue-700">EDUCATION-VN</h1>
+    <h2 class="text-sm text-red-600 mb-6">Hệ thống quản lý học tập EUS</h2>
+
+    <!-- FORM ĐĂNG NHẬP -->
+    <form id="loginForm" onsubmit="return loginUser(event)">
+      <div class="mb-4 text-left">
+        <label for="email" class="block font-semibold">Email:</label>
+        <input type="email" id="email" name="email"
+               class="w-full border-2 border-blue-600 rounded px-3 py-2"
+               placeholder="Nhập email" required>
+      </div>
+      <div class="mb-4 text-left">
+        <label for="password" class="block font-semibold">Mật khẩu:</label>
+        <input type="password" id="password" name="password"
+               class="w-full border-2 border-blue-600 rounded px-3 py-2"
+               placeholder="Nhập mật khẩu" required>
+      </div>
+      <button type="submit"
+              class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        Đăng nhập
+      </button>
+      <div class="text-right mt-2">
+        <a href="#" onclick="showForgotPassword(event)" class="text-blue-600 underline">Quên mật khẩu?</a>
+      </div>
+    </form>
+
+    <!-- FORM QUÊN MẬT KHẨU -->
+    <form id="forgotPasswordForm" onsubmit="return forgotPassword(event)" class="hidden">
+      <div class="mb-4 text-left">
+        <label for="forgotEmail" class="block font-semibold">Email khôi phục:</label>
+        <input type="email" id="forgotEmail" name="forgotEmail"
+               class="w-full border-2 border-blue-600 rounded px-3 py-2"
+               placeholder="Nhập email khôi phục" required>
+      </div>
+      <button type="submit"
+              class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        Gửi liên kết
+      </button>
+      <div class="text-right mt-2">
+        <a href="#" onclick="showLoginForm(event)" class="text-blue-600 underline">Quay lại đăng nhập</a>
+      </div>
+    </form>
+
+    <!-- NÚT GOOGLE LOGIN -->
+    <button onclick="googleLogin(event)"
+            class="w-full bg-red-500 text-white py-2 rounded mt-4 hover:bg-red-600">
+      Đăng nhập bằng Gmail AGU
+    </button>
+  </div>
+
+  <script>
+    // Đăng nhập thường
+    async function loginUser(event) {
+      event.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const res = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.token) {
+          localStorage.setItem("token", data.token);
+          window.location.href = "dashboard.html";
+        } else {
+          alert(data.error || "Sai email hoặc mật khẩu!");
+        }
+      } catch (err) {
+        alert("Lỗi kết nối: " + err.message);
+      }
+    }
+
+    // Đăng nhập qua Gmail (redirect đến backend Google OAuth)
+    function googleLogin(event) {
+      event.preventDefault();
+      window.location.href = "/auth/google"; // chuyển hướng sang Google login
+    }
+
+    // Quên mật khẩu
+    async function forgotPassword(event) {
+      event.preventDefault();
+      const email = document.getElementById("forgotEmail").value;
+
+      try {
+        const res = await fetch("/api/forgot-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          alert("Liên kết khôi phục đã được gửi đến email.");
+          showLoginForm();
+        } else {
+          alert(data.error || "Không tìm thấy email.");
+        }
+      } catch (err) {
+        alert("Lỗi kết nối: " + err.message);
+      }
+    }
+
+    // Chuyển đổi form
+    function showForgotPassword(e) {
+      e.preventDefault();
+      document.getElementById("loginForm").classList.add("hidden");
+      document.getElementById("forgotPasswordForm").classList.remove("hidden");
+    }
+
+    function showLoginForm(e) {
+      if (e) e.preventDefault();
+      document.getElementById("forgotPasswordForm").classList.add("hidden");
+      document.getElementById("loginForm").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,3193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education - Nền tảng Giáo dục Thông minh</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.9.1/chart.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --border-radius: 12px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4c6ef5;
+            --secondary-color: #6c5ce7;
+            --light-color: #2d3748;
+            --dark-color: #1a202c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+            transition: var(--transition);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Enhanced Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            /* -webkit-background-clip: text; */
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle, .lang-toggle, .notification-bell {
+            padding: 10px;
+            background: var(--light-color);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 16px;
+        }
+
+        .theme-toggle:hover, .lang-toggle:hover, .notification-bell:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Enhanced Login */
+        .login-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            max-width: 600px;
+            margin: 50px auto;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 4px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .auth-tab.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Enhanced Dashboard */
+        .dashboard {
+            display: none;
+            gap: 20px;
+            grid-template-columns: 320px 1fr;
+            grid-template-rows: auto 1fr;
+            grid-template-areas: 
+                "sidebar main"
+                "sidebar main";
+        }
+
+        .dashboard.active {
+            display: grid;
+        }
+
+        .sidebar {
+            grid-area: sidebar;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            height: fit-content;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 120px;
+        }
+
+        .main-content {
+            grid-area: main;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            min-height: 800px;
+        }
+
+        /* Enhanced User Profile */
+        .user-profile {
+            text-align: center;
+            padding: 25px 0;
+            border-bottom: 2px solid var(--light-color);
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 15px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 16px;
+            height: 16px;
+            background: var(--success-color);
+            border: 3px solid white;
+            border-radius: 50%;
+        }
+
+        /* Enhanced Menu */
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-item {
+            padding: 15px;
+            margin: 8px 0;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .menu-item:hover {
+            background: var(--light-color);
+            transform: translateX(5px);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .menu-badge {
+            background: var(--danger-color);
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 10px;
+            margin-left: auto;
+        }
+
+        /* Enhanced Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover::before {
+            right: -40%;
+        }
+
+        .stat-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .stat-trend {
+            margin-top: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        /* Enhanced Cards */
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-color);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        /* Enhanced Course Grid */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .course-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .course-code {
+            background: var(--light-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .course-progress {
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--light-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        /* Enhanced Tables */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-color);
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        tr:hover {
+            background: var(--light-color);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-present { background: #d4edda; color: #155724; }
+        .status-absent { background: #f8d7da; color: #721c24; }
+        .status-late { background: #fff3cd; color: #856404; }
+        .status-pending { background: #e2e3e5; color: #383d41; }
+
+        /* Enhanced Buttons */
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: var(--transition);
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary { background: var(--info-color); }
+        .btn-success { background: var(--success-color); }
+        .btn-danger { background: var(--danger-color); }
+        .btn-warning { background: var(--warning-color); color: var(--dark-color); }
+
+        /* Enhanced Forms */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 15px;
+            border: 2px solid var(--light-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Enhanced Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-color);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--dark-color);
+            padding: 5px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .close-btn:hover {
+            background: var(--light-color);
+            transform: rotate(90deg);
+        }
+
+        /* Chat System */
+        .chat-container {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--light-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: var(--light-color);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .message.own {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .message-content {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 70%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.own .message-content {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background: white;
+            gap: 10px;
+            border-top: 1px solid var(--light-color);
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid var(--light-color);
+            border-radius: 25px;
+            outline: none;
+        }
+
+        /* Quiz System */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .question-number {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-option {
+            padding: 15px;
+            border: 2px solid var(--light-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .answer-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .answer-option.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Calendar */
+        .calendar {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 15px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            min-height: 60px;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: var(--light-color);
+        }
+
+        .calendar-day.today {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-day.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--warning-color);
+            border-radius: 50%;
+        }
+
+        /* File Upload */
+        .file-upload-area {
+            border: 3px dashed var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .file-upload-area:hover, .file-upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: var(--transition);
+            max-width: 350px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error { background: var(--danger-color); }
+        .notification.warning { background: var(--warning-color); color: var(--dark-color); }
+        .notification.info { background: var(--info-color); }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light-color);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 280px 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+                grid-template-areas: 
+                    "main"
+                    "sidebar";
+            }
+            
+            .sidebar {
+                position: static;
+                margin-top: 20px;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+
+        /* Dark Mode */
+        [data-theme="dark"] {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        [data-theme="dark"] .card,
+        [data-theme="dark"] .sidebar,
+        [data-theme="dark"] .main-content,
+        [data-theme="dark"] .header,
+        [data-theme="dark"] .login-section,
+        [data-theme="dark"] .modal-content {
+            background: rgba(45, 55, 72, 0.95);
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] input,
+        [data-theme="dark"] select,
+        [data-theme="dark"] textarea {
+            background: #2d3748;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        /* Gamification */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: var(--warning-color);
+            color: var(--dark-color);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .achievement {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .achievement:hover {
+            transform: translateY(-5px);
+        }
+
+        .achievement-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: var(--warning-color);
+        }
+
+        /* Video Player */
+        .video-player {
+            background: #000;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 16/9;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .play-btn {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .progress-slider {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        /* Search */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid var(--light-color);
+            border-radius: 25px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Additional Components */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -23px;
+            top: 25px;
+            width: 12px;
+            height: 12px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary-color);
+        }
+
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .kanban-column {
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+        }
+
+        .kanban-header {
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid white;
+        }
+
+        .kanban-card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: move;
+            transition: var(--transition);
+        }
+
+        .kanban-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Enhanced Header -->
+        <div class="header">
+            <nav class="nav">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>EduHub Pro</span>
+                </div>
+                <div class="nav-controls">
+                    <div class="search-container" style="width: 300px; margin: 0;">
+                        <input type="text" class="search-input" placeholder="Tìm kiếm khóa học, bài tập..." style="padding: 10px 40px 10px 15px;">
+                        <button class="search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+                    <button class="lang-toggle" onclick="toggleLanguage()">
+                        <i class="fas fa-globe"></i>
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div style="position: relative;">
+                        <button class="notification-bell" onclick="toggleNotifications()">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Enhanced Login Section -->
+        <div class="login-section" id="loginSection">
+            <h2 style="text-align: center; margin-bottom: 30px; color: var(--dark-color);">
+                <i class="fas fa-user-circle"></i> Chào mừng đến EUS
+            </h2>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Đăng nhập</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')">Đăng ký</button>
+                <button class="auth-tab" onclick="switchAuthTab('forgot')">Quên mật khẩu</button>
+            </div>
+            
+            <div id="loginTab" class="auth-content">
+                <form class="auth-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required placeholder="example@email.com" value="admin@eduhub.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Mật khẩu:</label>
+                        <input type="password" id="password" name="password" required placeholder="••••••••" value="admin123">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="role">Vai trò:</label>
+                        <select id="role" name="role" required>
+                            <option value="">Chọn vai trò</option>
+                            <option value="admin">Quản trị viên</option>
+                            <option value="teacher">Giáo viên</option>
+                            <option value="student">Học sinh</option>
+                            <option value="parent">Phụ huynh</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Ghi nhớ đăng nhập</label>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%;">
+                        <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                    </button>
+                </form>
+                
+                <div style="margin: 20px 0; text-align: center; color: #666;">hoặc đăng nhập bằng</div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="loginWithGoogle()">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="loginWithMicrosoft()">
+                        <i class="fab fa-microsoft"></i> Microsoft
+                    </button>
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="loginWithFacebook()">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </button>
+                </div>
+            </div>
+            
+            <div id="registerTab" class="auth-content" style="display: none;">
+                <form class="auth-form" id="registerForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Họ:</label>
+                            <input type="text" name="firstName" required placeholder="Nguyễn">
+                        </div>
+                        <div class="form-group">
+                            <label>Tên:</label>
+                            <input type="text" name="lastName" required placeholder="Văn A">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" name="email" required placeholder="example@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Mật khẩu:</label>
+                        <input type="password" name="password" required placeholder="••••••••">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Xác nhận mật khẩu:</label>
+                        <input type="password" name="confirmPassword" required placeholder="••••••••">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Vai trò:</label>
+                        <select name="role" required>
+                            <option value="">Chọn vai trò</option>
+                            <option value="teacher">Giáo viên</option>
+                            <option value="student">Học sinh</option>
+                            <option value="parent">Phụ huynh</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                        <input type="checkbox" id="agree" name="agree" required>
+                        <label for="agree">Tôi đồng ý với <a href="#" style="color: var(--primary-color);">Điều khoản sử dụng</a></label>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%;">
+                        <i class="fas fa-user-plus"></i> Đăng ký
+                    </button>
+                </form>
+            </div>
+            
+            <div id="forgotTab" class="auth-content" style="display: none;">
+                <form class="auth-form" id="forgotForm">
+                    <div class="form-group">
+                        <label>Email khôi phục:</label>
+                        <input type="email" name="email" required placeholder="example@email.com">
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%;">
+                        <i class="fas fa-paper-plane"></i> Gửi link khôi phục
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Enhanced Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <!-- Enhanced Sidebar -->
+            <div class="sidebar">
+                <div class="user-profile">
+                    <div class="avatar" id="userAvatar" onclick="openModal('profileModal')">
+                        <i class="fas fa-user"></i>
+                        <div class="status-indicator"></div>
+                    </div>
+                    <div class="user-name" id="userName">Người dùng</div>
+                    <div class="user-role" id="userRole">Vai trò</div>
+                    <div style="margin-top: 10px;">
+                        <span class="badge"><i class="fas fa-star"></i> Level 5</span>
+                        <span class="badge"><i class="fas fa-trophy"></i> 1,250 XP</span>
+                    </div>
+                </div>
+                
+                <ul class="menu-list" id="menuList">
+                    <!-- Menu items will be populated by JavaScript -->
+                </ul>
+                
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="openModal('settingsModal')" style="width: 100%; margin-bottom: 10px;">
+                        <i class="fas fa-cog"></i> Cài đặt
+                    </button>
+                    <button class="btn btn-danger" onclick="logout()" style="width: 100%;">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </button>
+                </div>
+            </div>
+
+            <!-- Enhanced Main Content -->
+            <div class="main-content">
+                <!-- Dashboard Overview -->
+                <div class="content-section active" id="overview">
+                    <div class="card-header">
+                        <h2><i class="fas fa-tachometer-alt"></i> Tổng quan hệ thống</h2>
+                        <div>
+                            <button class="btn btn-secondary" onclick="refreshDashboard()">
+                                <i class="fas fa-sync"></i> Làm mới
+                            </button>
+                            <button class="btn" onclick="openModal('quickActionsModal')">
+                                <i class="fas fa-bolt"></i> Thao tác nhanh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid" id="statsGrid">
+                        <!-- Stats will be populated by JavaScript -->
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-top: 30px;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Hoạt động gần đây</h3>
+                                <button class="btn btn-secondary" onclick="viewAllActivities()">Xem tất cả</button>
+                            </div>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div style="font-weight: 600;">Tạo khóa học mới</div>
+                                    <div style="color: #666; font-size: 14px;">Lập trình Web Nâng cao (CS301) - 2 giờ trước</div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div style="font-weight: 600;">Điểm danh buổi học</div>
+                                    <div style="color: #666; font-size: 14px;">Toán cao cấp - 35/40 có mặt - 4 giờ trước</div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div style="font-weight: 600;">Chấm bài tập</div>
+                                    <div style="color: #666; font-size: 14px;">Bài tập số 3 - 28 bài đã chấm - 1 ngày trước</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Lịch hôm nay</h3>
+                                <button class="btn btn-secondary" onclick="openModal('calendarModal')">Chi tiết</button>
+                            </div>
+                            <div>
+                                <div style="padding: 15px; border-left: 4px solid var(--primary-color); margin: 10px 0; background: var(--light-color);">
+                                    <div style="font-weight: 600;">Lập trình Web</div>
+                                    <div style="color: #666; font-size: 14px;">07:30 - 09:30</div>
+                                </div>
+                                <div style="padding: 15px; border-left: 4px solid var(--success-color); margin: 10px 0; background: var(--light-color);">
+                                    <div style="font-weight: 600;">Họp khoa</div>
+                                    <div style="color: #666; font-size: 14px;">14:00 - 15:30</div>
+                                </div>
+                                <div style="padding: 15px; border-left: 4px solid var(--warning-color); margin: 10px 0; background: var(--light-color);">
+                                    <div style="font-weight: 600;">Chấm bài kiểm tra</div>
+                                    <div style="color: #666; font-size: 14px;">19:00 - 21:00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Course Management -->
+                <div class="content-section" id="courses">
+                    <div class="card-header">
+                        <h2><i class="fas fa-book"></i> Quản lý khóa học</h2>
+                        <div>
+                            <button class="btn btn-secondary" onclick="openModal('importCoursesModal')">
+                                <i class="fas fa-file-import"></i> Import khóa học
+                            </button>
+                            <button class="btn" onclick="openModal('createCourseModal')">
+                                <i class="fas fa-plus"></i> Tạo khóa học
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
+                        <select style="padding: 10px; border-radius: 8px; border: 1px solid var(--light-color);">
+                            <option>Tất cả khóa học</option>
+                            <option>Đang hoạt động</option>
+                            <option>Đã kết thúc</option>
+                            <option>Sắp bắt đầu</option>
+                        </select>
+                        <select style="padding: 10px; border-radius: 8px; border: 1px solid var(--light-color);">
+                            <option>Tất cả môn học</option>
+                            <option>Công nghệ thông tin</option>
+                            <option>Toán học</option>
+                            <option>Tiếng Anh</option>
+                        </select>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-filter"></i> Lọc nâng cao
+                        </button>
+                    </div>
+                    
+                    <div class="course-grid" id="courseGrid">
+                        <!-- Courses will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Enhanced Attendance Management -->
+                <div class="content-section" id="attendance">
+                    <div class="card-header">
+                        <h2><i class="fas fa-clipboard-list"></i> Quản lý điểm danh</h2>
+                        <div>
+                            <button class="btn btn-secondary" onclick="openModal('attendanceReportModal')">
+                                <i class="fas fa-chart-line"></i> Báo cáo
+                            </button>
+                            <button class="btn" onclick="openModal('createAttendanceModal')">
+                                <i class="fas fa-plus"></i> Tạo phiên điểm danh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 300px; gap: 25px;">
+                        <div>
+                            <div id="attendanceList">
+                                <!-- Attendance sessions will be populated -->
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 style="margin-bottom: 15px;">Thống kê nhanh</h3>
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <div style="text-align: center; padding: 15px; background: var(--light-color); border-radius: 8px;">
+                                    <div style="font-size: 24px; font-weight: bold; color: var(--success-color);">95%</div>
+                                    <div style="font-size: 14px;">Tỷ lệ chuyên cần</div>
+                                </div>
+                                <div style="text-align: center; padding: 15px; background: var(--light-color); border-radius: 8px;">
+                                    <div style="font-size: 24px; font-weight: bold; color: var(--primary-color);">156</div>
+                                    <div style="font-size: 14px;">Buổi học hôm nay</div>
+                                </div>
+                                <div style="text-align: center; padding: 15px; background: var(--light-color); border-radius: 8px;">
+                                    <div style="font-size: 24px; font-weight: bold; color: var(--warning-color);">23</div>
+                                    <div style="font-size: 14px;">Học sinh vắng</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Assignment Management -->
+                <div class="content-section" id="assignments">
+                    <div class="card-header">
+                        <h2><i class="fas fa-tasks"></i> Quản lý bài tập</h2>
+                        <div>
+                            <button class="btn btn-secondary" onclick="openModal('assignmentTemplateModal')">
+                                <i class="fas fa-copy"></i> Mẫu bài tập
+                            </button>
+                            <button class="btn" onclick="openModal('createAssignmentModal')">
+                                <i class="fas fa-plus"></i> Tạo bài tập
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="kanban-board">
+                        <div class="kanban-column">
+                            <div class="kanban-header">
+                                <i class="fas fa-clock"></i> Đang mở (5)
+                            </div>
+                            <div class="kanban-card">
+                                <div style="font-weight: 600; margin-bottom: 8px;">Bài tập React Hooks</div>
+                                <div style="font-size: 12px; color: #666; margin-bottom: 10px;">CS301 - Hạn: 25/09/2025</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span class="status-badge status-present">28/35 nộp</span>
+                                    <div>
+                                        <button class="btn" style="font-size: 10px; padding: 4px 8px;">Chi tiết</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="kanban-card">
+                                <div style="font-weight: 600; margin-bottom: 8px;">Bài kiểm tra Giữa kỳ</div>
+                                <div style="font-size: 12px; color: #666; margin-bottom: 10px;">MATH201 - Hạn: 30/09/2025</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span class="status-badge status-late">15/42 nộp</span>
+                                    <div>
+                                        <button class="btn" style="font-size: 10px; padding: 4px 8px;">Chi tiết</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="kanban-column">
+                            <div class="kanban-header">
+                                <i class="fas fa-hourglass-half"></i> Đang chấm (3)
+                            </div>
+                            <div class="kanban-card">
+                                <div style="font-weight: 600; margin-bottom: 8px;">Báo cáo dự án</div>
+                                <div style="font-size: 12px; color: #666; margin-bottom: 10px;">CS301 - Đã hết hạn</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span class="status-badge status-warning">20/35 chấm</span>
+                                    <div>
+                                        <button class="btn btn-warning" style="font-size: 10px; padding: 4px 8px;">Chấm điểm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="kanban-column">
+                            <div class="kanban-header">
+                                <i class="fas fa-check"></i> Hoàn thành (8)
+                            </div>
+                            <div class="kanban-card">
+                                <div style="font-weight: 600; margin-bottom: 8px;">Bài tập HTML/CSS</div>
+                                <div style="font-size: 12px; color: #666; margin-bottom: 10px;">CS301 - Hoàn thành 20/09</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span class="status-badge status-present">35/35 chấm</span>
+                                    <div>
+                                        <button class="btn btn-success" style="font-size: 10px; padding: 4px 8px;">Xem kết quả</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced User Management -->
+                <div class="content-section" id="users">
+                    <div class="card-header">
+                        <h2><i class="fas fa-users"></i> Quản lý người dùng</h2>
+                        <div>
+                            <button class="btn btn-secondary" onclick="openModal('bulkActionsModal')">
+                                <i class="fas fa-tasks"></i> Thao tác hàng loạt
+                            </button>
+                            <button class="btn btn-success" onclick="openModal('importUsersModal')">
+                                <i class="fas fa-file-excel"></i> Import Excel
+                            </button>
+                            <button class="btn" onclick="openModal('createUserModal')">
+                                <i class="fas fa-user-plus"></i> Thêm người dùng
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
+                        <select style="padding: 10px; border-radius: 8px; border: 1px solid var(--light-color);">
+                            <option>Tất cả vai trò</option>
+                            <option>Quản trị viên</option>
+                            <option>Giáo viên</option>
+                            <option>Học sinh</option>
+                            <option>Phụ huynh</option>
+                        </select>
+                        <select style="padding: 10px; border-radius: 8px; border: 1px solid var(--light-color);">
+                            <option>Tất cả trạng thái</option>
+                            <option>Hoạt động</option>
+                            <option>Tạm khóa</option>
+                            <option>Chưa kích hoạt</option>
+                        </select>
+                        <input type="text" placeholder="Tìm theo tên, email..." style="padding: 10px; border-radius: 8px; border: 1px solid var(--light-color); min-width: 200px;">
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll"></th>
+                                    <th>Avatar</th>
+                                    <th>Tên</th>
+                                    <th>Email</th>
+                                    <th>Vai trò</th>
+                                    <th>Trạng thái</th>
+                                    <th>Lần đăng nhập cuối</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userList">
+                                <!-- Users will be populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Enhanced Resources -->
+                <div class="content-section" id="resources">
+                    <div class="card-header">
+                        <h2><i class="fas fa-folder"></i> Quản lý tài nguyên</h2>
+                        <div>
+                            <button class="btn btn-secondary" onclick="openModal('resourceStatsModal')">
+                                <i class="fas fa-chart-pie"></i> Thống kê
+                            </button>
+                            <button class="btn" onclick="openModal('uploadResourceModal')">
+                                <i class="fas fa-upload"></i> Tải lên tài nguyên
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 250px 1fr; gap: 25px;">
+                        <div class="card">
+                            <h3 style="margin-bottom: 15px;">Thư mục</h3>
+                            <div class="menu-list">
+                                <div class="menu-item active">
+                                    <i class="fas fa-folder"></i> Tất cả tài nguyên
+                                </div>
+                                <div class="menu-item">
+                                    <i class="fas fa-video"></i> Video bài giảng
+                                </div>
+                                <div class="menu-item">
+                                    <i class="fas fa-file-pdf"></i> Tài liệu PDF
+                                </div>
+                                <div class="menu-item">
+                                    <i class="fas fa-file-powerpoint"></i> Slide thuyết trình
+                                </div>
+                                <div class="menu-item">
+                                    <i class="fas fa-file-code"></i> Mã nguồn
+                                </div>
+                                <div class="menu-item">
+                                    <i class="fas fa-trash"></i> Thùng rác
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;" id="resourceGrid">
+                                <!-- Resources will be populated -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz System -->
+                <div class="content-section" id="quiz">
+                    <div class="card-header">
+                        <h2><i class="fas fa-question-circle"></i> Hệ thống Quiz</h2>
+                        <div>
+                            <button class="btn btn-secondary" onclick="openModal('questionBankModal')">
+                                <i class="fas fa-database"></i> Ngân hàng câu hỏi
+                            </button>
+                            <button class="btn" onclick="openModal('createQuizModal')">
+                                <i class="fas fa-plus"></i> Tạo quiz mới
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-container">
+                        <div class="question-card">
+                            <div class="question-number">Câu hỏi 1/10</div>
+                            <div class="question-text">React Hooks được giới thiệu trong phiên bản nào của React?</div>
+                            <div class="answer-options">
+                                <div class="answer-option" onclick="selectAnswer(this)">
+                                    <input type="radio" name="q1" value="a">
+                                    <span>React 15.6</span>
+                                </div>
+                                <div class="answer-option" onclick="selectAnswer(this)">
+                                    <input type="radio" name="q1" value="b">
+                                    <span>React 16.8</span>
+                                </div>
+                                <div class="answer-option" onclick="selectAnswer(this)">
+                                    <input type="radio" name="q1" value="c">
+                                    <span>React 17.0</span>
+                                </div>
+                                <div class="answer-option" onclick="selectAnswer(this)">
+                                    <input type="radio" name="q1" value="d">
+                                    <span>React 18.0</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: between; margin-top: 20px; gap: 15px;">
+                                <button class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Câu trước
+                                </button>
+                                <div style="flex: 1; text-align: center;">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 10%;"></div>
+                                    </div>
+                                    <div style="font-size: 14px; margin-top: 5px;">Thời gian còn lại: 14:35</div>
+                                </div>
+                                <button class="btn">
+                                    Câu tiếp <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat System -->
+                <div class="content-section" id="chat">
+                    <div class="card-header">
+                        <h2><i class="fas fa-comments"></i> Diễn đàn & Chat</h2>
+                        <div>
+                            <button class="btn btn-secondary" onclick="createChatRoom()">
+                                <i class="fas fa-plus"></i> Tạo phòng chat
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 300px 1fr; gap: 25px;">
+                        <div class="card">
+                            <h3 style="margin-bottom: 15px;">Phòng chat</h3>
+                            <div class="menu-list">
+                                <div class="menu-item active">
+                                    <i class="fas fa-hashtag"></i> Lập trình Web
+                                    <div class="menu-badge">3</div>
+                                </div>
+                                <div class="menu-item">
+                                    <i class="fas fa-hashtag"></i> Toán cao cấp
+                                    <div class="menu-badge">1</div>
+                                </div>
+                                <div class="menu-item">
+                                    <i class="fas fa-hashtag"></i> Thông báo chung
+                                </div>
+                            </div>
+                            
+                            <h3 style="margin: 20px 0 15px;">Tin nhắn riêng</h3>
+                            <div class="menu-list">
+                                <div class="menu-item">
+                                    <div class="message-avatar">GV</div>
+                                    <span>TS. Nguyễn Văn A</span>
+                                </div>
+                                <div class="menu-item">
+                                    <div class="message-avatar">HS</div>
+                                    <span>Trần Thị B</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-container">
+                            <div class="chat-header">
+                                <i class="fas fa-hashtag"></i> Lập trình Web
+                                <div style="margin-left: auto; display: flex; gap: 10px;">
+                                    <button style="background: none; border: none; color: white;">
+                                        <i class="fas fa-users"></i> 35
+                                    </button>
+                                    <button style="background: none; border: none; color: white;">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="chat-messages" id="chatMessages">
+                                <div class="message">
+                                    <div class="message-avatar">GV</div>
+                                    <div class="message-content">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">TS. Nguyễn Văn A</div>
+                                        <div>Chào các em! Hôm nay chúng ta sẽ học về React Hooks. Ai có thắc mắc gì không?</div>
+                                        <div style="font-size: 12px; color: #999; margin-top: 5px;">14:30</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="message">
+                                    <div class="message-avatar">HS</div>
+                                    <div class="message-content">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">Trần Thị B</div>
+                                        <div>Thầy ơi, em chưa hiểu rõ về useState. Thầy có thể giải thích thêm không ạ?</div>
+                                        <div style="font-size: 12px; color: #999; margin-top: 5px;">14:32</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="message own">
+                                    <div class="message-avatar">You</div>
+                                    <div class="message-content">
+                                        <div>useState là một hook giúp quản lý state trong functional component...</div>
+                                        <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 5px;">14:35</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="chat-input">
+                                <button style="background: none; border: none; padding: 10px;">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                                <input type="text" placeholder="Nhập tin nhắn..." onkeypress="handleChatInput(event)">
+                                <button style="background: none; border: none; padding: 10px;">
+                                    <i class="fas fa-smile"></i>
+                                </button>
+                                <button class="btn" onclick="sendMessage()">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Reports -->
+                <div class="content-section" id="reports">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-bar"></i> Báo cáo & Phân tích</h2>
+                        <div>
+                            <button class="btn btn-secondary" onclick="scheduleReport()">
+                                <i class="fas fa-clock"></i> Lập lịch báo cáo
+                            </button>
+                            <button class="btn" onclick="openModal('customReportModal')">
+                                <i class="fas fa-chart-line"></i> Báo cáo tùy chỉnh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 30px;">
+                        <div class="card">
+                            <h3>Tỷ lệ chuyên cần</h3>
+                            <canvas id="attendanceChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="card">
+                            <h3>Điểm số trung bình</h3>
+                            <canvas id="gradeChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="card">
+                            <h3>Hoạt động người dùng</h3>
+                            <canvas id="activityChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="card">
+                            <h3>Top khóa học phổ biến</h3>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--light-color); border-radius: 8px;">
+                                    <span>Lập trình Web</span>
+                                    <span style="font-weight: bold;">856 HS</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--light-color); border-radius: 8px;">
+                                    <span>Toán cao cấp</span>
+                                    <span style="font-weight: bold;">742 HS</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--light-color); border-radius: 8px;">
+                                    <span>Tiếng Anh</span>
+                                    <span style="font-weight: bold;">631 HS</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">Xuất báo cáo</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                            <button class="btn btn-success" onclick="exportReport('attendance')">
+                                <i class="fas fa-file-excel"></i> Báo cáo chuyên cần
+                            </button>
+                            <button class="btn btn-success" onclick="exportReport('grades')">
+                                <i class="fas fa-file-excel"></i> Báo cáo điểm số
+                            </button>
+                            <button class="btn btn-success" onclick="exportReport('activity')">
+                                <i class="fas fa-file-excel"></i> Báo cáo hoạt động
+                            </button>
+                            <button class="btn btn-success" onclick="exportReport('financial')">
+                                <i class="fas fa-file-excel"></i> Báo cáo tài chính
+                            </button>
+                            <button class="btn btn-success" onclick="exportReport('usage')">
+                                <i class="fas fa-file-excel"></i> Báo cáo sử dụng
+                            </button>
+                            <button class="btn btn-success" onclick="exportReport('performance')">
+                                <i class="fas fa-file-excel"></i> Báo cáo hiệu suất
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gamification -->
+                <div class="content-section" id="gamification">
+                    <div class="card-header">
+                        <h2><i class="fas fa-trophy"></i> Gamification</h2>
+                        <div>
+                            <button class="btn" onclick="openModal('achievementModal')">
+                                <i class="fas fa-medal"></i> Tạo thành tích
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 300px; gap: 25px;">
+                        <div>
+                            <div class="card">
+                                <h3>Bảng xếp hạng lớp</h3>
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Hạng</th>
+                                                <th>Học sinh</th>
+                                                <th>XP</th>
+                                                <th>Level</th>
+                                                <th>Huy hiệu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><i class="fas fa-crown" style="color: gold;"></i> 1</td>
+                                                <td>Nguyễn Văn A</td>
+                                                <td>2,850</td>
+                                                <td>8</td>
+                                                <td>
+                                                    <span class="badge"><i class="fas fa-star"></i> Xuất sắc</span>
+                                                    <span class="badge"><i class="fas fa-fire"></i> Streak 30</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><i class="fas fa-medal" style="color: silver;"></i> 2</td>
+                                                <td>Trần Thị B</td>
+                                                <td>2,640</td>
+                                                <td>7</td>
+                                                <td>
+                                                    <span class="badge"><i class="fas fa-book"></i> Học giỏi</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><i class="fas fa-medal" style="color: #CD7F32;"></i> 3</td>
+                                                <td>Lê Văn C</td>
+                                                <td>2,420</td>
+                                                <td>7</td>
+                                                <td>
+                                                    <span class="badge"><i class="fas fa-clock"></i> Đúng giờ</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="card" style="margin-top: 25px;">
+                                <h3>Thành tích có sẵn</h3>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                                    <div class="achievement">
+                                        <div class="achievement-icon"><i class="fas fa-star"></i></div>
+                                        <div style="font-weight: 600;">Học sinh xuất sắc</div>
+                                        <div style="font-size: 14px; color: #666;">Đạt điểm cao trong 5 bài kiểm tra liên tiếp</div>
+                                    </div>
+                                    <div class="achievement">
+                                        <div class="achievement-icon"><i class="fas fa-fire"></i></div>
+                                        <div style="font-weight: 600;">Streak Master</div>
+                                        <div style="font-size: 14px; color: #666;">Chuyên cần 30 ngày liên tiếp</div>
+                                    </div>
+                                    <div class="achievement">
+                                        <div class="achievement-icon"><i class="fas fa-comments"></i></div>
+                                        <div style="font-weight: 600;">Tích cực tham gia</div>
+                                        <div style="font-size: 14px; color: #666;">Đóng góp 100 bình luận hữu ích</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="card">
+                                <h3>Tiến độ cá nhân</h3>
+                                <div style="text-align: center; margin-bottom: 20px;">
+                                    <div style="font-size: 48px; color: var(--primary-color); margin-bottom: 10px;">
+                                        <i class="fas fa-user-circle"></i>
+                                    </div>
+                                    <div style="font-weight: 600; font-size: 18px;">Level 5</div>
+                                    <div style="color: #666;">1,250 / 1,500 XP</div>
+                                    <div class="progress-bar" style="margin: 10px 0;">
+                                        <div class="progress-fill" style="width: 83%;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span>Bài tập hoàn thành</span>
+                                        <span style="font-weight: bold;">24/30</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span>Ngày chuyên cần</span>
+                                        <span style="font-weight: bold;">18/20</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span>Quiz đã làm</span>
+                                        <span style="font-weight: bold;">12/15</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card" style="margin-top: 20px;">
+                                <h3>Huy hiệu của bạn</h3>
+                                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                    <span class="badge"><i class="fas fa-star"></i> Xuất sắc</span>
+                                    <span class="badge"><i class="fas fa-clock"></i> Đúng giờ</span>
+                                    <span class="badge"><i class="fas fa-book"></i> Siêng năng</span>
+                                    <span class="badge"><i class="fas fa-comments"></i> Tích cực</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="content-section" id="settings">
+                    <div class="card-header">
+                        <h2><i class="fas fa-cog"></i> Cài đặt hệ thống</h2>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 250px 1fr; gap: 25px;">
+                        <div class="card">
+                            <div class="menu-list">
+                                <div class="menu-item active" onclick="showSettingTab('general')">
+                                    <i class="fas fa-cog"></i> Cài đặt chung
+                                </div>
+                                <div class="menu-item" onclick="showSettingTab('security')">
+                                    <i class="fas fa-shield-alt"></i> Bảo mật
+                                </div>
+                                <div class="menu-item" onclick="showSettingTab('notifications')">
+                                    <i class="fas fa-bell"></i> Thông báo
+                                </div>
+                                <div class="menu-item" onclick="showSettingTab('integrations')">
+                                    <i class="fas fa-plug"></i> Tích hợp
+                                </div>
+                                <div class="menu-item" onclick="showSettingTab('backup')">
+                                    <i class="fas fa-database"></i> Sao lưu
+                                </div>
+                                <div class="menu-item" onclick="showSettingTab('appearance')">
+                                    <i class="fas fa-palette"></i> Giao diện
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div id="generalSettings" class="setting-tab active">
+                                <h3>Cài đặt chung</h3>
+                                <div class="form-group">
+                                    <label>Tên hệ thống:</label>
+                                    <input type="text" value="EduHub Pro" placeholder="Tên hệ thống">
+                                </div>
+                                <div class="form-group">
+                                    <label>Timezone:</label>
+                                    <select>
+                                        <option>Asia/Ho_Chi_Minh</option>
+                                        <option>Asia/Bangkok</option>
+                                        <option>UTC</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngôn ngữ mặc định:</label>
+                                    <select>
+                                        <option>Tiếng Việt</option>
+                                        <option>English</option>
+                                        <option>中文</option>
+                                    </select>
+                                </div>
+                                <button class="btn">Lưu thay đổi</button>
+                            </div>
+                            
+                            <div id="securitySettings" class="setting-tab">
+                                <h3>Cài đặt bảo mật</h3>
+                                <div class="form-group">
+                                    <label>Yêu cầu 2FA:</label>
+                                    <input type="checkbox" checked> Bắt buộc xác thực 2 yếu tố
+                                </div>
+                                <div class="form-group">
+                                    <label>Thời gian hết hạn session (phút):</label>
+                                    <input type="number" value="30" min="5" max="1440">
+                                </div>
+                                <div class="form-group">
+                                    <label>Độ mạnh mật khẩu:</label>
+                                    <select>
+                                        <option>Trung bình</option>
+                                        <option>Mạnh</option>
+                                        <option>Rất mạnh</option>
+                                    </select>
+                                </div>
+                                <button class="btn">Lưu thay đổi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Modals Here -->
+    
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Hồ sơ cá nhân</h3>
+                <button class="close-btn" onclick="closeModal('profileModal')">&times;</button>
+            </div>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <div class="avatar" style="width: 100px; height: 100px; margin: 0 auto 15px;">
+                    <i class="fas fa-user"></i>
+                </div>
+                <button class="btn btn-secondary">
+                    <i class="fas fa-camera"></i> Thay đổi avatar
+                </button>
+            </div>
+            <form>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Họ:</label>
+                        <input type="text" value="Nguyễn">
+                    </div>
+                    <div class="form-group">
+                        <label>Tên:</label>
+                        <input type="text" value="Văn A">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" value="admin@eduhub.com">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại:</label>
+                    <input type="tel" value="+84 123 456 789">
+                </div>
+                <div class="form-group">
+                    <label>Bio:</label>
+                    <textarea rows="3" placeholder="Viết gì đó về bản thân..."></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn">Cập nhật</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('profileModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Course Modal -->
+    <div class="modal" id="createCourseModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Tạo khóa học mới</h3>
+                <button class="close-btn" onclick="closeModal('createCourseModal')">&times;</button>
+            </div>
+            <form id="createCourseForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Tên khóa học:</label>
+                        <input type="text" name="title" required placeholder="Ví dụ: Lập trình Web Nâng cao">
+                    </div>
+                    <div class="form-group">
+                        <label>Mã khóa học:</label>
+                        <input type="text" name="code" required placeholder="Ví dụ: CS301">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mô tả:</label>
+                    <textarea name="description" rows="4" placeholder="Mô tả chi tiết về khóa học..."></textarea>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Học kỳ:</label>
+                        <select name="term" required>
+                            <option value="">Chọn học kỳ</option>
+                            <option value="2025-1">Học kỳ I, 2025-2026</option>
+                            <option value="2025-2">Học kỳ II, 2025-2026</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Số tín chỉ:</label>
+                        <input type="number" name="credits" min="1" max="6" value="3">
+                    </div>
+                    <div class="form-group">
+                        <label>Giới hạn học sinh:</label>
+                        <input type="number" name="maxStudents" min="1" value="50">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Lịch học:</label>
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;">
+                        <label style="text-align: center;"><input type="checkbox" name="schedule" value="mon"> T2</label>
+                        <label style="text-align: center;"><input type="checkbox" name="schedule" value="tue"> T3</label>
+                        <label style="text-align: center;"><input type="checkbox" name="schedule" value="wed"> T4</label>
+                        <label style="text-align: center;"><input type="checkbox" name="schedule" value="thu"> T5</label>
+                        <label style="text-align: center;"><input type="checkbox" name="schedule" value="fri"> T6</label>
+                        <label style="text-align: center;"><input type="checkbox" name="schedule" value="sat"> T7</label>
+                        <label style="text-align: center;"><input type="checkbox" name="schedule" value="sun"> CN</label>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Thời gian bắt đầu:</label>
+                        <input type="time" name="startTime" value="07:30">
+                    </div>
+                    <div class="form-group">
+                        <label>Thời gian kết thúc:</label>
+                        <input type="time" name="endTime" value="09:30">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Ảnh khóa học:</label>
+                    <div class="file-upload-area" onclick="document.getElementById('courseImage').click()">
+                        <div class="upload-icon"><i class="fas fa-image"></i></div>
+                        <div>Kéo thả hoặc click để chọn ảnh</div>
+                        <div style="font-size: 12px; color: #666;">PNG, JPG tối đa 5MB</div>
+                    </div>
+                    <input type="file" id="courseImage" style="display: none;" accept="image/*">
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 25px;">
+                    <button type="submit" class="btn">Tạo khóa học</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('createCourseModal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Other modals would continue here... -->
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentRole = null;
+        let selectedAttendanceMethod = null;
+        let currentTheme = 'light';
+        let currentLanguage = 'vi';
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            initializeCharts();
+        });
+
+        function initializeApp() {
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                currentRole = currentUser.role;
+                showDashboard();
+            }
+
+            // Setup event handlers
+            setupEventHandlers();
+            
+            // Setup theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+        }
+
+        function setupEventHandlers() {
+            // Auth forms
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            if (document.getElementById('registerForm')) {
+                document.getElementById('registerForm').addEventListener('submit', handleRegister);
+            }
+            if (document.getElementById('forgotForm')) {
+                document.getElementById('forgotForm').addEventListener('submit', handleForgotPassword);
+            }
+            
+            // Course form
+            if (document.getElementById('createCourseForm')) {
+                document.getElementById('createCourseForm').addEventListener('submit', handleCreateCourse);
+            }
+
+            // Search
+            document.querySelector('.search-input').addEventListener('input', handleSearch);
+            
+            // File uploads
+            setupFileUpload();
+        }
+
+        // Authentication functions
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-content').forEach(c => c.style.display = 'none');
+            
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Tab').style.display = 'block';
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            showLoading();
+            
+            const formData = new FormData(e.target);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            const role = formData.get('role');
+
+            // Simulate authentication delay
+            setTimeout(() => {
+                if (email && password && role) {
+                    currentUser = {
+                        id: Date.now(),
+                        name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+                        email: email,
+                        role: role,
+                        avatar: email.charAt(0).toUpperCase(),
+                        lastLogin: new Date().toISOString(),
+                        status: 'online'
+                    };
+                    currentRole = role;
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showNotification('Đăng nhập thành công!', 'success');
+                    showDashboard();
+                } else {
+                    showNotification('Vui lòng điền đầy đủ thông tin!', 'error');
+                }
+                hideLoading();
+            }, 1500);
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            showLoading();
+            
+            setTimeout(() => {
+                showNotification('Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.', 'success');
+                switchAuthTab('login');
+                hideLoading();
+            }, 2000);
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            showLoading();
+            
+            setTimeout(() => {
+                showNotification('Link khôi phục mật khẩu đã được gửi đến email của bạn!', 'success');
+                hideLoading();
+            }, 1500);
+        }
+
+        function loginWithGoogle() {
+            showLoading();
+            setTimeout(() => {
+                currentUser = {
+                    id: Date.now(),
+                    name: 'Google User',
+                    email: 'user@gmail.com',
+                    role: 'teacher',
+                    avatar: 'G',
+                    provider: 'google',
+                    lastLogin: new Date().toISOString()
+                };
+                currentRole = 'teacher';
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showNotification('Đăng nhập với Google thành công!', 'success');
+                showDashboard();
+                hideLoading();
+            }, 1000);
+        }
+
+        function loginWithMicrosoft() {
+            showLoading();
+            setTimeout(() => {
+                currentUser = {
+                    id: Date.now(),
+                    name: 'Microsoft User',
+                    email: 'user@outlook.com',
+                    role: 'student',
+                    avatar: 'M',
+                    provider: 'microsoft',
+                    lastLogin: new Date().toISOString()
+                };
+                currentRole = 'student';
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showNotification('Đăng nhập với Microsoft thành công!', 'success');
+                showDashboard();
+                hideLoading();
+            }, 1000);
+        }
+
+        function loginWithFacebook() {
+            showLoading();
+            setTimeout(() => {
+                currentUser = {
+                    id: Date.now(),
+                    name: 'Facebook User',
+                    email: 'user@facebook.com',
+                    role: 'parent',
+                    avatar: 'F',
+                    provider: 'facebook',
+                    lastLogin: new Date().toISOString()
+                };
+                currentRole = 'parent';
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showNotification('Đăng nhập với Facebook thành công!', 'success');
+                showDashboard();
+                hideLoading();
+            }, 1000);
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            currentRole = null;
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('dashboard').classList.remove('active');
+            showNotification('Đã đăng xuất!', 'success');
+        }
+
+        // Dashboard functions
+        function showDashboard() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+            
+            updateUserProfile();
+            updateMenu();
+            updateStatsGrid();
+            loadDashboardData();
+        }
+
+        function updateUserProfile() {
+            document.getElementById('userAvatar').textContent = currentUser.avatar;
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = getRoleDisplayName(currentUser.role);
+        }
+
+        function updateMenu() {
+            const menuList = document.getElementById('menuList');
+            const menuItems = {
+                admin: [
+                    { id: 'overview', icon: 'fas fa-tachometer-alt', text: 'Tổng quan', badge: null },
+                    { id: 'users', icon: 'fas fa-users', text: 'Quản lý người dùng', badge: '1,250' },
+                    { id: 'courses', icon: 'fas fa-book', text: 'Quản lý khóa học', badge: '85' },
+                    { id: 'attendance', icon: 'fas fa-clipboard-list', text: 'Điểm danh', badge: null },
+                    { id: 'assignments', icon: 'fas fa-tasks', text: 'Bài tập', badge: null },
+                    { id: 'resources', icon: 'fas fa-folder', text: 'Tài nguyên', badge: null },
+                    { id: 'quiz', icon: 'fas fa-question-circle', text: 'Quiz & Kiểm tra', badge: null },
+                    { id: 'chat', icon: 'fas fa-comments', text: 'Diễn đàn & Chat', badge: '3' },
+                    { id: 'gamification', icon: 'fas fa-trophy', text: 'Gamification', badge: null },
+                    { id: 'reports', icon: 'fas fa-chart-bar', text: 'Báo cáo & Thống kê', badge: null },
+                    { id: 'settings', icon: 'fas fa-cog', text: 'Cài đặt hệ thống', badge: null }
+                ],
+                teacher: [
+                    { id: 'overview', icon: 'fas fa-tachometer-alt', text: 'Tổng quan', badge: null },
+                    { id: 'courses', icon: 'fas fa-book', text: 'Khóa học của tôi', badge: '8' },
+                    { id: 'attendance', icon: 'fas fa-clipboard-list', text: 'Điểm danh', badge: '2' },
+                    { id: 'assignments', icon: 'fas fa-tasks', text: 'Bài tập', badge: '5' },
+                    { id: 'resources', icon: 'fas fa-folder', text: 'Tài nguyên', badge: null },
+                    { id: 'quiz', icon: 'fas fa-question-circle', text: 'Quiz & Kiểm tra', badge: null },
+                    { id: 'chat', icon: 'fas fa-comments', text: 'Diễn đàn & Chat', badge: '7' },
+                    { id: 'gamification', icon: 'fas fa-trophy', text: 'Bảng xếp hạng', badge: null },
+                    { id: 'reports', icon: 'fas fa-chart-bar', text: 'Báo cáo', badge: null }
+                ],
+                student: [
+                    { id: 'overview', icon: 'fas fa-tachometer-alt', text: 'Tổng quan', badge: null },
+                    { id: 'courses', icon: 'fas fa-book', text: 'Khóa học của tôi', badge: '6' },
+                    { id: 'assignments', icon: 'fas fa-tasks', text: 'Bài tập', badge: '3' },
+                    { id: 'resources', icon: 'fas fa-folder', text: 'Tài nguyên', badge: null },
+                    { id: 'quiz', icon: 'fas fa-question-circle', text: 'Quiz & Kiểm tra', badge: '2' },
+                    { id: 'chat', icon: 'fas fa-comments', text: 'Diễn đàn & Chat', badge: '5' },
+                    { id: 'gamification', icon: 'fas fa-trophy', text: 'Thành tích', badge: null }
+                ],
+                parent: [
+                    { id: 'overview', icon: 'fas fa-tachometer-alt', text: 'Tổng quan', badge: null },
+                    { id: 'tracking', icon: 'fas fa-eye', text: 'Theo dõi con em', badge: '2' },
+                    { id: 'chat', icon: 'fas fa-comments', text: 'Liên hệ giáo viên', badge: '1' }
+                ]
+            };
+
+            menuList.innerHTML = menuItems[currentRole].map(item => 
+                `<li class="menu-item ${item.id === 'overview' ? 'active' : ''}" onclick="showContent('${item.id}')">
+                    <i class="${item.icon}"></i>
+                    <span>${item.text}</span>
+                    ${item.badge ? `<div class="menu-badge">${item.badge}</div>` : ''}
+                </li>`
+            ).join('');
+        }
+
+        function updateStatsGrid() {
+            const statsGrid = document.getElementById('statsGrid');
+            const stats = {
+                admin: [
+                    { number: '1,250', label: 'Tổng người dùng', icon: 'fas fa-users', trend: '+12% tuần này' },
+                    { number: '85', label: 'Khóa học hoạt động', icon: 'fas fa-book', trend: '+3 khóa mới' },
+                    { number: '99.2%', label: 'Thời gian hoạt động', icon: 'fas fa-server', trend: 'Ổn định' },
+                    { number: '4.8/5', label: 'Đánh giá hệ thống', icon: 'fas fa-star', trend: '+0.2 điểm' }
+                ],
+                teacher: [
+                    { number: '8', label: 'Khóa học đang dạy', icon: 'fas fa-book', trend: '2 mới tuần này' },
+                    { number: '156', label: 'Học sinh', icon: 'fas fa-user-graduate', trend: '+8 học sinh' },
+                    { number: '24', label: 'Bài tập đã giao', icon: 'fas fa-tasks', trend: '5 chưa chấm' },
+                    { number: '92%', label: 'Tỷ lệ chuyên cần', icon: 'fas fa-clipboard-list', trend: '+3% so với trước' }
+                ],
+                student: [
+                    { number: '6', label: 'Khóa học đăng ký', icon: 'fas fa-book', trend: 'Hoàn thành 4/6' },
+                    { number: '3', label: 'Bài tập chưa nộp', icon: 'fas fa-exclamation-triangle', trend: 'Hạn trong tuần' },
+                    { number: '8.5', label: 'Điểm trung bình', icon: 'fas fa-star', trend: '+0.3 điểm' },
+                    { number: '95%', label: 'Tỷ lệ chuyên cần', icon: 'fas fa-calendar-check', trend: 'Xuất sắc' }
+                ],
+                parent: [
+                    { number: '2', label: 'Con em theo học', icon: 'fas fa-child', trend: 'Cả 2 đều tốt' },
+                    { number: '90%', label: 'Tỷ lệ chuyên cần', icon: 'fas fa-calendar-check', trend: 'Ổn định' },
+                    { number: '7.8', label: 'Điểm trung bình', icon: 'fas fa-star', trend: 'Tiến bộ tốt' },
+                    { number: '3', label: 'Thông báo mới', icon: 'fas fa-bell', trend: '1 quan trọng' }
+                ]
+            };
+
+            statsGrid.innerHTML = stats[currentRole].map(stat => 
+                `<div class="stat-card">
+                    <div class="stat-icon"><i class="${stat.icon}"></i></div>
+                    <div class="stat-number">${stat.number}</div>
+                    <div class="stat-label">${stat.label}</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        ${stat.trend}
+                    </div>
+                </div>`
+            ).join('');
+        }
+
+        function loadDashboardData() {
+            loadCourses();
+            loadAttendance();
+            loadAssignments();
+            loadUsers();
+            loadResources();
+        }
+
+        // Content functions
+        function showContent(contentId) {
+            // Hide all content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected content
+            const selectedSection = document.getElementById(contentId);
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+            }
+            
+            // Update menu active state
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        // Data loading functions
+        function loadCourses() {
+            const courseGrid = document.getElementById('courseGrid');
+            if (!courseGrid) return;
+            
+            const sampleCourses = [
+                {
+                    title: 'Lập trình Web Nâng cao',
+                    code: 'CS301',
+                    description: 'Học về React, Node.js và MongoDB. Xây dựng ứng dụng web hiện đại.',
+                    students: 35,
+                    maxStudents: 50,
+                    teacher: 'TS. Nguyễn Văn A',
+                    schedule: 'Thứ 2, 4, 6 - 7:30-9:30',
+                    progress: 68,
+                    status: 'Đang diễn ra',
+                    image: 'https://via.placeholder.com/300x150?text=Web+Development'
+                },
+                {
+                    title: 'Toán cao cấp',
+                    code: 'MATH201',
+                    description: 'Giải tích và đại số tuyến tính cho sinh viên kỹ thuật.',
+                    students: 42,
+                    maxStudents: 45,
+                    teacher: 'PGS. Trần Thị B',
+                    schedule: 'Thứ 3, 5 - 13:30-15:30',
+                    progress: 45,
+                    status: 'Đang diễn ra',
+                    image: 'https://via.placeholder.com/300x150?text=Mathematics'
+                },
+                {
+                    title: 'Cơ sở dữ liệu',
+                    code: 'DB101',
+                    description: 'SQL Server, thiết kế CSDL và tối ưu hóa truy vấn.',
+                    students: 28,
+                    maxStudents: 35,
+                    teacher: 'Th.S Lê Văn C',
+                    schedule: 'Thứ 6 - 9:30-12:30',
+                    progress: 82,
+                    status: 'Sắp kết thúc',
+                    image: 'https://via.placeholder.com/300x150?text=Database'
+                },
+                {
+                    title: 'Machine Learning',
+                    code: 'AI301',
+                    description: 'Học máy với Python, TensorFlow và các thuật toán ML.',
+                    students: 0,
+                    maxStudents: 30,
+                    teacher: 'TS. Phạm Thị D',
+                    schedule: 'Thứ 2, 4 - 15:30-17:30',
+                    progress: 0,
+                    status: 'Sắp bắt đầu',
+                    image: 'https://via.placeholder.com/300x150?text=Machine+Learning'
+                }
+            ];
+
+            courseGrid.innerHTML = sampleCourses.map(course => 
+                `<div class="course-card fade-in">
+                    <div style="height: 120px; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="course-header">
+                        <div>
+                            <div class="course-title">${course.title}</div>
+                            <div style="color: #666; margin: 5px 0; font-size: 14px;">${course.description}</div>
+                        </div>
+                        <div class="course-code">${course.code}</div>
+                    </div>
+                    <div style="margin: 15px 0; font-size: 14px; color: #666;">
+                        <div style="margin-bottom: 5px;"><i class="fas fa-user-graduate"></i> ${course.students}/${course.maxStudents} học sinh</div>
+                        <div style="margin-bottom: 5px;"><i class="fas fa-chalkboard-teacher"></i> ${course.teacher}</div>
+                        <div style="margin-bottom: 5px;"><i class="fas fa-clock"></i> ${course.schedule}</div>
+                        <div><i class="fas fa-info-circle"></i> ${course.status}</div>
+                    </div>
+                    <div class="course-progress">
+                        <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
+                            <span>Tiến độ</span>
+                            <span>${course.progress}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${course.progress}%;"></div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="btn" style="flex: 1; font-size: 14px;" onclick="openCourse('${course.code}')">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </button>
+                        ${currentRole === 'teacher' || currentRole === 'admin' ? 
+                            `<button class="btn btn-secondary" style="font-size: 14px;" onclick="manageCourse('${course.code}')">
+                                <i class="fas fa-cog"></i> Quản lý
+                            </button>` : 
+                            course.status === 'Đang diễn ra' ?
+                            `<button class="btn btn-success" style="font-size: 14px;" onclick="joinMeeting('${course.code}')">
+                                <i class="fas fa-video"></i> Vào lớp
+                            </button>` :
+                            `<button class="btn btn-warning" style="font-size: 14px;" onclick="enrollCourse('${course.code}')">
+                                <i class="fas fa-plus"></i> Đăng ký
+                            </button>`
+                        }
+                    </div>
+                </div>`
+            ).join('');
+        }
+
+        function loadAttendance() {
+            const attendanceList = document.getElementById('attendanceList');
+            if (!attendanceList) return;
+            
+            const sampleAttendance = [
+                {
+                    id: 1,
+                    course: 'CS301',
+                    courseTitle: 'Lập trình Web Nâng cao',
+                    title: 'Bài 5 - React Hooks',
+                    date: '2025-09-17',
+                    time: '07:30',
+                    method: 'QR Code',
+                    status: 'Đang mở',
+                    present: 32,
+                    total: 35,
+                    duration: 15
+                },
+                {
+                    id: 2,
+                    course: 'MATH201',
+                    courseTitle: 'Toán cao cấp',
+                    title: 'Bài 3 - Tích phân từng phần',
+                    date: '2025-09-16',
+                    time: '13:30',
+                    method: 'PIN',
+                    status: 'Đã đóng',
+                    present: 38,
+                    total: 42,
+                    duration: 10
+                },
+                {
+                    id: 3,
+                    course: 'DB101',
+                    courseTitle: 'Cơ sở dữ liệu',
+                    title: 'Bài 7 - Stored Procedures',
+                    date: '2025-09-15',
+                    time: '09:30',
+                    method: 'Thủ công',
+                    status: 'Đã đóng',
+                    present: 25,
+                    total: 28,
+                    duration: 20
+                }
+            ];
+
+            attendanceList.innerHTML = `
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Khóa học</th>
+                                <th>Tiêu đề buổi học</th>
+                                <th>Thời gian</th>
+                                <th>Phương thức</th>
+                                <th>Trạng thái</th>
+                                <th>Có mặt/Tổng</th>
+                                <th>Tỷ lệ</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${sampleAttendance.map(session => {
+                                const attendanceRate = ((session.present / session.total) * 100).toFixed(1);
+                                return `
+                                <tr>
+                                    <td>
+                                        <div style="font-weight: 600;">${session.course}</div>
+                                        <div style="font-size: 12px; color: #666;">${session.courseTitle}</div>
+                                    </td>
+                                    <td>${session.title}</td>
+                                    <td>
+                                        <div>${session.date}</div>
+                                        <div style="font-size: 12px; color: #666;">${session.time}</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge">
+                                            <i class="fas fa-${session.method === 'QR Code' ? 'qrcode' : session.method === 'PIN' ? 'key' : 'list'}"></i>
+                                            ${session.method}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge ${session.status === 'Đang mở' ? 'status-present' : 'status-absent'}">
+                                            ${session.status}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 600;">${session.present}/${session.total}</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 600; color: ${attendanceRate >= 90 ? 'var(--success-color)' : attendanceRate >= 70 ? 'var(--warning-color)' : 'var(--danger-color)'};">
+                                            ${attendanceRate}%
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                            <button class="btn" style="font-size: 12px; padding: 6px 12px;" onclick="openAttendanceSession(${session.id})">
+                                                <i class="fas fa-eye"></i> Xem
+                                            </button>
+                                            ${session.status === 'Đang mở' ? 
+                                                `<button class="btn btn-danger" style="font-size: 12px; padding: 6px 12px;" onclick="closeAttendanceSession(${session.id})">
+                                                    <i class="fas fa-stop"></i> Đóng
+                                                </button>` : ''
+                                            }
+                                            <button class="btn btn-secondary" style="font-size: 12px; padding: 6px 12px;" onclick="exportAttendance(${session.id})">
+                                                <i class="fas fa-download"></i> Xuất
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;}).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function loadAssignments() {
+            // Implementation for loading assignments
+            // This would be similar to loadAttendance but for assignments
+        }
+
+        function loadUsers() {
+            const userList = document.getElementById('userList');
+            if (!userList || currentRole !== 'admin') return;
+            
+            const sampleUsers = [
+                { id: 1, name: 'TS. Nguyễn Văn A', email: 'nguyenvana@eduhub.com', role: 'teacher', status: 'Hoạt động', lastLogin: '2025-09-17 14:30', avatar: 'NA' },
+                { id: 2, name: 'PGS. Trần Thị B', email: 'tranthib@eduhub.com', role: 'teacher', status: 'Hoạt động', lastLogin: '2025-09-17 09:15', avatar: 'TB' },
+                { id: 3, name: 'Lê Văn C', email: 'levanc@student.edu', role: 'student', status: 'Hoạt động', lastLogin: '2025-09-17 16:45', avatar: 'LC' },
+                { id: 4, name: 'Phạm Thị D', email: 'phamthid@student.edu', role: 'student', status: 'Tạm khóa', lastLogin: '2025-09-15 10:20', avatar: 'PD' },
+                { id: 5, name: 'Hoàng Văn E', email: 'hoangvane@parent.com', role: 'parent', status: 'Hoạt động', lastLogin: '2025-09-16 20:30', avatar: 'HE' }
+            ];
+
+            userList.innerHTML = sampleUsers.map(user => `
+                <tr>
+                    <td><input type="checkbox" value="${user.id}"></td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="avatar" style="width: 40px; height: 40px; font-size: 14px;">
+                                ${user.avatar}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600;">${user.name}</div>
+                    </td>
+                    <td>${user.email}</td>
+                    <td><span class="badge">${getRoleDisplayName(user.role)}</span></td>
+                    <td>
+                        <span class="status-badge ${user.status === 'Hoạt động' ? 'status-present' : 'status-absent'}">
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="font-size: 14px;">${user.lastLogin}</div>
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <button class="btn" style="font-size: 12px; padding: 6px 12px;" onclick="editUser(${user.id})">
+                                <i class="fas fa-edit"></i> Sửa
+                            </button>
+                            <button class="btn btn-danger" style="font-size: 12px; padding: 6px 12px;" onclick="deleteUser(${user.id})">
+                                <i class="fas fa-trash"></i> Xóa
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadResources() {
+            const resourceGrid = document.getElementById('resourceGrid');
+            if (!resourceGrid) return;
+            
+            const sampleResources = [
+                {
+                    name: 'Bài giảng React Hooks.pdf',
+                    type: 'PDF',
+                    size: '2.5 MB',
+                    course: 'CS301',
+                    uploaded: '2025-09-15',
+                    downloads: 45,
+                    icon: 'fas fa-file-pdf',
+                    color: '#dc3545'
+                },
+                {
+                    name: 'Video hướng dẫn NodeJS.mp4',
+                    type: 'Video',
+                    size: '125 MB',
+                    course: 'CS301',
+                    uploaded: '2025-09-14',
+                    downloads: 38,
+                    icon: 'fas fa-file-video',
+                    color: '#6f42c1'
+                },
+                {
+                    name: 'Source code Todo App.zip',
+                    type: 'Archive',
+                    size: '856 KB',
+                    course: 'CS301',
+                    uploaded: '2025-09-13',
+                    downloads: 67,
+                    icon: 'fas fa-file-archive',
+                    color: '#fd7e14'
+                },
+                {
+                    name: 'Slide Toán cao cấp.pptx',
+                    type: 'Presentation',
+                    size: '4.2 MB',
+                    course: 'MATH201',
+                    uploaded: '2025-09-12',
+                    downloads: 52,
+                    icon: 'fas fa-file-powerpoint',
+                    color: '#d63384'
+                }
+            ];
+
+            resourceGrid.innerHTML = sampleResources.map(resource => `
+                <div class="card" style="text-align: center; padding: 20px;">
+                    <div style="font-size: 48px; color: ${resource.color}; margin-bottom: 15px;">
+                        <i class="${resource.icon}"></i>
+                    </div>
+                    <div style="font-weight: 600; margin-bottom: 8px;">${resource.name}</div>
+                    <div style="font-size: 12px; color: #666; margin-bottom: 5px;">${resource.size} • ${resource.course}</div>
+                    <div style="font-size: 12px; color: #666; margin-bottom: 15px;">${resource.downloads} lượt tải</div>
+                    <div style="display: flex; gap: 5px; justify-content: center;">
+                        <button class="btn" style="font-size: 12px; padding: 6px 12px;" onclick="downloadResource('${resource.name}')">
+                            <i class="fas fa-download"></i> Tải về
+                        </button>
+                        ${currentRole === 'teacher' || currentRole === 'admin' ? 
+                            `<button class="btn btn-danger" style="font-size: 12px; padding: 6px 12px;" onclick="deleteResource('${resource.name}')">
+                                <i class="fas fa-trash"></i> Xóa
+                            </button>` : ''
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Helper functions
+        function getRoleDisplayName(role) {
+            const roles = {
+                admin: 'Quản trị viên',
+                teacher: 'Giáo viên',
+                student: 'Học sinh',
+                parent: 'Phụ huynh'
+            };
+            return roles[role] || role;
+        }
+
+        // Theme functions
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(currentTheme);
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            const themeIcon = document.querySelector('.theme-toggle i');
+            if (themeIcon) {
+                themeIcon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            }
+        }
+
+        // Language functions
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'vi' ? 'en' : 'vi';
+            // Implement language switching logic here
+            showNotification(`Đã chuyển sang ${currentLanguage === 'vi' ? 'Tiếng Việt' : 'English'}`, 'info');
+        }
+
+        // Notification functions
+        function toggleNotifications() {
+            showNotification('Hiển thị danh sách thông báo...', 'info');
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Search function
+        function handleSearch(e) {
+            const query = e.target.value.toLowerCase();
+            // Implement search logic here
+            console.log('Searching for:', query);
+        }
+
+        // Loading functions
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        // Charts initialization
+        function initializeCharts() {
+            // This function would initialize Chart.js charts
+            // Implementation would depend on actual chart requirements
+        }
+
+        // Form handlers
+        function handleCreateCourse(e) {
+            e.preventDefault();
+            showLoading();
+            
+            setTimeout(() => {
+                showNotification('Khóa học đã được tạo thành công!', 'success');
+                closeModal('createCourseModal');
+                loadCourses();
+                e.target.reset();
+                hideLoading();
+            }, 1500);
+        }
+
+        // File upload setup
+        function setupFileUpload() {
+            const uploadAreas = document.querySelectorAll('.file-upload-area');
+            
+            uploadAreas.forEach(area => {
+                area.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    area.classList.add('dragover');
+                });
+                
+                area.addEventListener('dragleave', () => {
+                    area.classList.remove('dragover');
+                });
+                
+                area.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    area.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        handleFileUpload(files[0]);
+                    }
+                });
+            });
+        }
+
+        function handleFileUpload(file) {
+            showNotification(`Đang tải lên file: ${file.name}...`, 'info');
+            
+            // Simulate file upload
+            setTimeout(() => {
+                showNotification(`File ${file.name} đã được tải lên thành công!`, 'success');
+            }, 2000);
+        }
+
+        // Quiz functions
+        function selectAnswer(element) {
+            const options = element.parentNode.querySelectorAll('.answer-option');
+            options.forEach(option => option.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            const radio = element.querySelector('input[type="radio"]');
+            radio.checked = true;
+        }
+
+        // Chat functions
+        function handleChatInput(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.querySelector('.chat-input input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessageToChat(message, true);
+                input.value = '';
+                
+                // Simulate response
+                setTimeout(() => {
+                    addMessageToChat('Cảm ơn bạn đã chia sẻ!', false);
+                }, 1000);
+            }
+        }
+
+        function addMessageToChat(message, isOwn) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOwn ? 'own' : ''}`;
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${isOwn ? 'You' : 'GV'}</div>
+                <div class="message-content">
+                    <div>${message}</div>
+                    <div style="font-size: 12px; color: ${isOwn ? 'rgba(255,255,255,0.7)' : '#999'}; margin-top: 5px;">
+                        ${new Date().toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'})}
+                    </div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Placeholder functions for various actions
+        function refreshDashboard() {
+            showLoading();
+            setTimeout(() => {
+                loadDashboardData();
+                showNotification('Dashboard đã được làm mới!', 'success');
+                hideLoading();
+            }, 1000);
+        }
+
+        function openCourse(courseCode) {
+            showNotification(`Đang mở khóa học ${courseCode}...`, 'info');
+        }
+
+        function manageCourse(courseCode) {
+            showNotification(`Đang quản lý khóa học ${courseCode}...`, 'info');
+        }
+
+        function joinMeeting(courseCode) {
+            showNotification(`Đang tham gia lớp học ${courseCode}...`, 'info');
+            setTimeout(() => {
+                window.open('https://meet.google.com/new', '_blank');
+            }, 1000);
+        }
+
+        function enrollCourse(courseCode) {
+            showNotification(`Đăng ký khóa học ${courseCode} thành công!`, 'success');
+            setTimeout(() => {
+                loadCourses();
+            }, 1000);
+        }
+
+        function exportReport(type) {
+            showLoading();
+            setTimeout(() => {
+                showNotification(`Báo cáo ${type} đã được xuất thành công!`, 'success');
+                hideLoading();
+            }, 2000);
+        }
+
+        function exportAttendance(sessionId) {
+            showNotification(`Đang xuất dữ liệu điểm danh phiên ${sessionId}...`, 'info');
+        }
+
+        function downloadResource(resourceName) {
+            showNotification(`Đang tải về ${resourceName}...`, 'info');
+        }
+
+        function deleteResource(resourceName) {
+            if (confirm(`Bạn có chắc muốn xóa ${resourceName}?`)) {
+                showNotification(`Đã xóa ${resourceName}!`, 'success');
+                loadResources();
+            }
+        }
+
+        function editUser(userId) {
+            showNotification(`Đang mở giao diện chỉnh sửa người dùng ${userId}...`, 'info');
+        }
+
+        function deleteUser(userId) {
+            if (confirm(`Bạn có chắc muốn xóa người dùng này?`)) {
+                showNotification(`Đã xóa người dùng!`, 'success');
+                loadUsers();
+            }
+        }
+
+        // Handle clicks outside modals to close them
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        // Handle escape key to close modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+            }
+        });
+
+        // Auto-save drafts
+        function autoSaveDraft() {
+            // Implementation for auto-saving form data
+        }
+
+        // Periodic auto-save
+        setInterval(autoSaveDraft, 30000); // Every 30 seconds
+    </script>
+</body>
+</html>

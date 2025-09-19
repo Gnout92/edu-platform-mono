@@ -1,0 +1,14 @@
+// models/Session.js  (điểm danh buổi học)
+const mongoose = require('mongoose');
+
+const SessionSchema = new mongoose.Schema({
+  courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
+  title: { type: String, required: true },         // VD: Bài 5 - React Hooks
+  date: { type: Date, required: true },            // 2025-09-17 07:30
+  method: { type: String, enum: ['qr','pin','manual'], default: 'qr' }, // QR Code/PIN/Thủ công
+  isOpen: { type: Boolean, default: true },
+  presentCount: { type: Number, default: 0 },
+  totalCount: { type: Number, default: 0 }
+}, { timestamps: true });
+
+module.exports = mongoose.model('Session', SessionSchema);
